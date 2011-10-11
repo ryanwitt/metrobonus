@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html manifest="cache.manifest">
+<head>
+<meta name="viewport" content="user-scalable=no; width=device-width; initial-scale=1.0; maximum-scale=1.0; target-densityDpi=device-dpi;"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.css" />
+<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
+<script src="js/patch.js"></script>
+<!--
+<link rel="stylesheet" href="jquery.mobile-1.0rc1.min.css" />
+<script src="jquery-1.6.4.min.js"></script>
+<script src="jquery.mobile-1.0rc1.min.js"></script>
+-->
+</head>
+<body>
+<div data-role="page">
+
+    <div data-role="header">
+        <h1>Metro Bonus Calculator</h1>
+    </div>
+
+    <div data-role="content">
+
+        <div style="padding: 10px; text-align:center; margin: 0 auto;">
+            <label for="slider" style="text-align:center; display:block; width:100%;" id="slider-label">How much do you have left on your card?</label>
+            <div class="ui-block-aa" id="amount" style="font-size:72px; font-weight:bold;">$0.00</div>
+            <div data-role="controlgroup" class="ui-block-bb" style="display:none;">
+                <a href="#" id="up" data-role="button" data-icons="arrow-u">+1</a>
+                <a href="#" id="down" data-role="button" data-icons="arrow-d">-1</a>
+            </div>
+            <div style="text-align:center; padding:10px;">
+                <input type="number" style="text-align: center; display:none;" data-type="range" name="slider" id="slider" value="0" min="0" step="5" max="225"/>
+            </div>
+        </div>
+
+        <div style="padding: 10px;">
+        <div id="other" style="display:block;" class="ui-grid-a">
+            <div id="more">
+            </div>
+        </div>
+        </div>
+
+    </div>
+
+    <style>
+    .ui-bar { padding:10px; text-align: center; }
+    </style>
+    <script>
+    $('#up').click(function() {
+        var s = $('#slider');
+        s.val(Math.min(225, parseFloat(s.val())+1));
+        s.trigger('change');
+    });
+    $('#down').click(function() {
+        var s = $('#slider');
+        s.val(Math.max(0, parseFloat(s.val())-1));
+        s.trigger('change');
+    });
+    var bonus = function(start) {
+      var amounts = [];
+        for (var i=1000; i<10000; i++) {
+          if (i % 5 != 0) continue;
+            var new_total = Math.round(((i/100.0)*1.07 + start) * 100);
+            //console.log({i:i, start:start, new_total:new_total});
+            if (new_total % 225 == 0)
+                amounts.push([i, new_total, new_total/225]);
+                //(start+x)*1.15 = n*2.25
+                //x = n*2.25/1.15 - start
+        }
+        //console.log(amounts);
+        return amounts;
+    }
+    var timeout;
+    $('#slider').change(function(){
+      var amount = $(this).val()/100;
+      var text   = '$' + amount.toFixed(2);
+        $('#amount').text(text);
+        $('#other').hide();
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+          amounts = bonus(amount);
+            var text = '';
+            console.log(amounts);
+            for (i in amounts) {
+              unpack = amounts[i];
+                i = unpack[0];
+                new_total = unpack[1];
+                rides = unpack[2];
+                if (rides == 1) {
+                    text += '<div class="ui-block-a"><div class="ui-bar ui-bar-e">For ' + rides + ' ride</div></div>';
+                } else {
+                    text += '<div class="ui-block-a"><div class="ui-bar ui-bar-e">For ' + rides + ' rides</div></div>';
+                }
+                text += '<div class="ui-block-b"><div class="ui-bar ui-bar-a" style="padding:10px;">Add $' + (i/100.0).toFixed(2) + '</div></div>';
+                //text += '<div class="ui-block-c"><div class="ui-bar">Total $' + (new_total/100.0).toFixed(2) + '</div></div>';
+            }
+            $('#more').html(text);
+            $('#other').fadeIn();
+        }, 500);
+    });
+    </script>
+
+</div>
+</body>
