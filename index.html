@@ -8,11 +8,20 @@
 <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
 <script src="js/patch.js"></script>
+<script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 <!--
 <link rel="stylesheet" href="jquery.mobile-1.0rc1.min.css" />
 <script src="jquery-1.6.4.min.js"></script>
 <script src="jquery.mobile-1.0rc1.min.js"></script>
 -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
 </head>
 <body>
 <div data-role="page">
@@ -40,6 +49,14 @@
             <div id="more">
             </div>
         </div>
+        </div>
+
+        <div id="about" style="text-align:center; margin-top:20px;">
+            Made with love <br/> by <a href="http://twitter.com/onecreativenerd">@onecreativenerd</a> at <a href="http://twitter.com/opani">@opani</a>
+<!--
+            <a href="#" data-role="button" style="width: 50%;" onClick="window.location.reload();" data-icon="refresh">Reload</a>
+-->
+
         </div>
 
     </div>
@@ -82,7 +99,7 @@
         timeout = setTimeout(function() {
           amounts = bonus(amount);
             var text = '';
-            console.log(amounts);
+            //console.log(amounts);
             for (i in amounts) {
               unpack = amounts[i];
                 i = unpack[0];
@@ -100,7 +117,55 @@
             $('#other').fadeIn();
         }, 500);
     });
+    window.addEventListener('load', function(e) {
+      if (window.applicationCache) {
+        window.applicationCache.addEventListener('updateready', function(e) {
+            if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+              // Browser downloaded a new app cache.
+              // Swap it in and reload the page to get the new hotness.
+              window.applicationCache.swapCache();
+              if (confirm('A new version of this site is available. Load it?')) {
+                window.location.reload();
+              }
+            } else {
+              // Manifest didn't changed. Nothing new to server.
+            }
+        }, false);
+      }
+    }, false);
     </script>
+<script type="text/javascript">
+$(document).live('pagecreate', function() {
+var _sf_async_config={uid:14098,domain:"metrocardbonusapp.com"};
+(function(){
+  function loadChartbeat() {
+    window._sf_endpt=(new Date()).getTime();
+    var e = document.createElement('script');
+    e.setAttribute('language', 'javascript');
+    e.setAttribute('type', 'text/javascript');
+    e.setAttribute('src',
+       (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+       "js/chartbeat.js");
+    document.body.appendChild(e);
+  }
+  var oldonload = window.onload;
+  window.onload = (typeof window.onload != 'function') ?
+     loadChartbeat : function() { oldonload(); loadChartbeat(); };
+})();
+});
+$('[data-role=page]').live('pageshow', function (event, ui) {
+    try {
+        _gaq.push(['_setAccount', 'UA-26284264-1']);
+        hash = location.hash;
+        if (hash) {
+            _gaq.push(['_trackPageview', hash.substr(1)]);
+        } else {
+            _gaq.push(['_trackPageview']);
+        }
+    } catch(err) {
+    }
+});
+</script>
 
 </div>
 </body>
