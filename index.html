@@ -58,6 +58,9 @@
 -->
 
         </div>
+        <div id="bookmark_prompt" style="display: none; text-align:center; margin-top:20px;">
+            Add this page to your home screen to use it in the subway!
+        </div>
 
     </div>
 
@@ -65,6 +68,9 @@
     .ui-bar { padding:10px; text-align: center; }
     </style>
     <script>
+    if (("standalone" in window.navigator) && !window.navigator.standalone) {
+      $('#bookmark_prompt').show();
+    }
     $('#up').click(function() {
         var s = $('#slider');
         s.val(Math.min(225, parseFloat(s.val())+1));
